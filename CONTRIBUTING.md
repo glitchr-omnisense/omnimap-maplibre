@@ -80,7 +80,8 @@ docker run --rm -v "$PWD":/app -w /app ghcr.io/glitchr-studio/php:8.4 sh -c 'com
    glitchr-studio/ci's `php-release.yml`: the tag is checked as a version, the changelog's
    section becomes the release's notes (no section, no release), the tag's source archive is
    attached with its SHA-256 and a build provenance attestation
-   (`gh attestation verify <zip> --repo <owner>/<repo>`), and the GitHub release is published -
+   (`gh attestation verify <zip> --repo <owner>/<repo> --signer-repo glitchr-studio/ci`:
+   the attestation is signed by glitchr-studio/ci's release workflow, which the package calls), and the GitHub release is published -
    a pre-release for `vX.Y.Z-rc.1` or any `0.x`.
 4. Packagist: submit the repository once (https://packagist.org/packages/submit); afterwards
    Packagist's GitHub integration picks tags up, or the release workflow tells it when the
