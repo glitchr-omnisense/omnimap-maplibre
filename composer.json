@@ -1,8 +1,18 @@
 {
     "name": "omnimap/maplibre",
     "type": "library",
-    "description": "MapLibre for omnimap, under any PHP host.",
-    "keywords": ["map", "maps", "maplibre", "framework-agnostic", "omnimap"],
+    "description": "Omnimap's MapLibre, under any PHP host: the live map drawn by MapLibre GL JS from a vector style (OpenFreeMap's by default: no key, no cookie), a driver for omnimap's script, and the style read on the server to name every host the browser reaches.",
+    "keywords": [
+        "map",
+        "maps",
+        "maplibre",
+        "maplibre-gl",
+        "vector-tiles",
+        "openfreemap",
+        "openstreetmap",
+        "framework-agnostic",
+        "omnimap"
+    ],
     "homepage": "https://github.com/glitchr-studio/omnimap-maplibre",
     "license": "MIT",
     "authors": [
@@ -14,15 +24,11 @@
     "require": {
         "php": ">=8.2",
         "omniscient/omnimap": "^1.0@dev",
-        "psr/simple-cache": "^2.0|^3.0",
         "symfony/http-client-contracts": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.0",
         "symfony/http-client": "^6.4|^7.0|^8.0"
-    },
-    "suggest": {
-        "ext-gd": "Images made of tiles (StaticMapInterface::image())"
     },
     "autoload": {
         "psr-4": {

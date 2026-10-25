@@ -5,30 +5,35 @@ namespace Omnimap\MapLibre;
 use Omnimap\Capabilities;
 use Omnimap\Exception\NotSupportedException;
 use Omnimap\MapRendererInterface;
-use Omnimap\Model\Image;
 use Omnimap\Model\MapView;
-use Omnimap\Model\Size;
-use Omnimap\Static\TileStitcher;
-use Omnimap\StaticMapInterface;
-use Omnimap\TileSourceInterface;
-use Psr\SimpleCache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * MapLibre: the live map drawn in the browser by assets/maplibre.js over a
- * tile server, and a view as an image made on the server from the same tiles.
- * The starting point the template gives: replace what the service does
- * differently, keep what the conformance suite checks.
+ * MapLibre: the live map drawn by MapLibre GL JS (assets/maplibre.js) from a
+ * vector style - OpenFreeMap's by default, any MapLibre style by its URL.
+ *
+ * Only a renderer: vector tiles are drawn by the browser's WebGL, not by PHP,
+ * so the server makes no image of a view (no StaticMapInterface) and serves no
+ * raster tiles (no TileSourceInterface). Its picture still reaches omnimap's
+ * map cache, captured in the browser (assets/capture.js; the map keeps its
+ * drawing buffer for it).
+ *
+ * MapView::options('maplibre')['map'] - MapLibre's map options, as JSON - is
+ * the only view option of its own.
  */
-final class MapLibreProvider implements MapRendererInterface, StaticMapInterface, TileSourceInterface
+final class MapLibreProvider implements MapRendererInterface
 {
+    /**
+     * @param list<string>          $hosts
+     * @param array<string, string> $library
+     */
     public function __construct(
-        private readonly string $tiles,
-        private readonly string $attribution = '',
-        private readonly int $maxZoom = 19,
-        private readonly ?string $userAgent = null,
+        private readonly string $style = MapLibreFactory::OPENFREEMAP_STYLE,
+        private readonly string $attribution = MapLibreFactory::OPENFREEMAP_ATTRIBUTION,
+        private readonly array $hosts = [],
+        private readonly array $library = [],
+        private readonly bool $preserveDrawingBuffer = true,
         private readonly ?HttpClientInterface $http = null,
-        private readonly ?CacheInterface $cache = null,
     ) {
     }
 
@@ -44,15 +49,15 @@ final class MapLibreProvider implements MapRendererInterface, StaticMapInterface
 
     public function capabilities(): Capabilities
     {
-        $host = parse_url($this->tiles, \PHP_URL_HOST);
+        $hosts = [...($this->hosts ?: [parse_url($this->style, \PHP_URL_HOST)]), parse_url($this->library['script'] ?? '', \PHP_URL_HOST), parse_url($this->library['module'] ?? '', \PHP_URL_HOST), parse_url($this->library['style'] ?? '', \PHP_URL_HOST)];
 
         return new Capabilities(
             renderer: true,
-            staticMap: null !== $this->http,
-            tiles: true,
-            browserHosts: \is_string($host) ? [$host] : [],
+            browserHosts: array_values(array_unique(array_filter($hosts, static fn ($host) => \is_string($host) && '' !== $host))),
             cookies: false,
-            terms: [],
+            terms: str_starts_with($this->style, 'https://tiles.openfreemap.org/')
+                ? ['https://openfreemap.org/tos/', 'https://www.openstreetmap.org/copyright', 'https://github.com/openmaptiles/openmaptiles/blob/master/LICENSE.md']
+                : ['https://www.openstreetmap.org/copyright'],
         );
     }
 
@@ -62,14 +67,16 @@ final class MapLibreProvider implements MapRendererInterface, StaticMapInterface
             'provider' => 'maplibre',
             'consent' => 'MAP',
             'view' => $view->toArray(),
-            'tiles' => ['template' => $this->tiles, 'maxZoom' => $this->maxZoom, 'tileSize' => 256],
+            'library' => $this->library,
+            'style' => $this->style,
+            'options' => ['map' => $view->options('maplibre')['map'] ?? new \stdClass(), 'preserveDrawingBuffer' => $this->preserveDrawingBuffer],
             'attribution' => $this->attribution,
         ];
     }
 
     public function fingerprint(MapView $view): string
     {
-        return 'maplibre|'.json_encode([$this->tiles, $view->center, $view->zoom, $view->markers, $view->controls], \JSON_THROW_ON_ERROR);
+        return 'maplibre|'.json_encode([$this->style, $view->center, $view->zoom, $view->markers, $view->controls, $view->options('maplibre')], \JSON_THROW_ON_ERROR);
     }
 
     public function attribution(): string
@@ -77,38 +84,19 @@ final class MapLibreProvider implements MapRendererInterface, StaticMapInterface
         return $this->attribution;
     }
 
-    public function image(MapView $view, Size $size, int $scale = 1): Image
+    /** The style's URL. */
+    public function style(): string
     {
-        if (null === $this->http) {
-            throw new NotSupportedException('No HTTP client was given to the MapLibre provider: no image made of tiles.');
-        }
-
-        return (new TileStitcher($this, $this->http, $this->cache))->image($view, $size, $scale);
+        return $this->style;
     }
 
-    public function template(): string
+    /**
+     * The style read on the server: what it makes the browser reach (Style::hosts()).
+     *
+     * @throws NotSupportedException without the factory's HTTP client
+     */
+    public function inspect(): Style
     {
-        return $this->tiles;
-    }
-
-    public function url(int $zoom, int $x, int $y): string
-    {
-        return str_replace(['{z}', '{x}', '{y}'], [(string) $zoom, (string) $x, (string) $y], $this->tiles);
-    }
-
-    public function tileSize(): int
-    {
-        return 256;
-    }
-
-    public function maxZoom(): int
-    {
-        return $this->maxZoom;
-    }
-
-    /** @return array<string, string> */
-    public function headers(): array
-    {
-        return array_filter(['User-Agent' => (string) $this->userAgent]);
+        return Style::fetch($this->http ?? throw new NotSupportedException('No HTTP client was given to the MapLibre provider: the style is not read on the server.'), $this->style);
     }
 }
