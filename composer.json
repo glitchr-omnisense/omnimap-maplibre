@@ -1,0 +1,50 @@
+{
+    "name": "omnimap/maplibre",
+    "type": "library",
+    "description": "MapLibre for omnimap, under any PHP host.",
+    "keywords": ["map", "maps", "maplibre", "framework-agnostic", "omnimap"],
+    "homepage": "https://github.com/glitchr-studio/omnimap-maplibre",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marco Meyer",
+            "email": "marco.meyer@glitchr.io"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "omniscient/omnimap": "^1.0@dev",
+        "psr/simple-cache": "^2.0|^3.0",
+        "symfony/http-client-contracts": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "symfony/http-client": "^6.4|^7.0|^8.0"
+    },
+    "suggest": {
+        "ext-gd": "Images made of tiles (StaticMapInterface::image())"
+    },
+    "autoload": {
+        "psr-4": {
+            "Omnimap\\MapLibre\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Omnimap\\MapLibre\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-1.x": "1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
