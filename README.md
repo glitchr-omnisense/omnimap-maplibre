@@ -33,7 +33,7 @@ in the browser (`assets/capture.js`): the map keeps its drawing buffer for it.
 
 ## Documentation
 
-- [Options, the style's hosts, what it answers](docs/index.md)
+- [The manual](docs/index.md): options, capabilities, the style's hosts, behaviour, an example, errors
 - [Contributing](CONTRIBUTING.md): the tests, the conformance suite, a release
 
 ## Verified, and not
