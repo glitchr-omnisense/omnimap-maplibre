@@ -1,6 +1,6 @@
 # omnimap/maplibre
 
-MapLibre for [omniscient/omnimap](https://github.com/glitchr-studio/omnimap): the live map drawn in
+MapLibre for [omnisense/omnimap](https://github.com/glitchr-omnisense/omnimap): the live map drawn in
 the browser by [MapLibre GL JS](https://maplibre.org) from a vector style (`assets/maplibre.js`, a
 driver for omnimap's `omnimap.js`) - by default [OpenFreeMap](https://openfreemap.org)'s
 "liberty", free, without a key and without cookies - and the style read on the server
@@ -21,7 +21,7 @@ in the browser (`assets/capture.js`): the map keeps its drawing buffer for it.
 composer require omnimap/maplibre
 ```
 
-Requires PHP 8.2, `omniscient/omnimap` (1.x) and `symfony/http-client-contracts`; reading a style on
+Requires PHP 8.2, `omnisense/omnimap` (1.x) and `symfony/http-client-contracts`; reading a style on
 the server needs a Symfony HTTP client (`symfony/http-client`). Then `assets/maplibre.js` beside
 omnimap's `assets/omnimap.js` in the page:
 

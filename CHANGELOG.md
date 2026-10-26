@@ -6,6 +6,9 @@ workflow refuses a tag without one.
 
 ## Unreleased
 
+### Changed
+- Requires `omnisense/omnimap`, the core's new name (Omniscient is now Omnisense); the repository is `glitchr-omnisense/omnimap-maplibre`.
+
 ## [0.1.0] - 2026-10-25
 
 ### Added

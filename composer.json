@@ -13,7 +13,7 @@
         "framework-agnostic",
         "omnimap"
     ],
-    "homepage": "https://github.com/glitchr-studio/omnimap-maplibre",
+    "homepage": "https://github.com/glitchr-omnisense/omnimap-maplibre",
     "license": "MIT",
     "authors": [
         {
@@ -23,7 +23,7 @@
     ],
     "require": {
         "php": ">=8.2",
-        "omniscient/omnimap": "^1.0@dev",
+        "omnisense/omnimap": "^1.0@dev",
         "symfony/http-client-contracts": "^3.0"
     },
     "require-dev": {

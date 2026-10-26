@@ -18,7 +18,7 @@ final class LiveTest extends TestCase
 {
     public function testOpenFreeMapsStyleTilesGlyphsAndSprite(): void
     {
-        $http = HttpClient::create(['headers' => ['User-Agent' => 'omnimap-maplibre-tests/0.1 (+https://github.com/glitchr-studio/omnimap-maplibre)'], 'timeout' => 20]);
+        $http = HttpClient::create(['headers' => ['User-Agent' => 'omnimap-maplibre-tests/0.1 (+https://github.com/glitchr-omnisense/omnimap-maplibre)'], 'timeout' => 20]);
         $provider = (new MapLibreFactory($http))->create();
         \assert($provider instanceof MapLibreProvider);
         $style = $provider->inspect();

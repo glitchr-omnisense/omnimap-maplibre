@@ -7,7 +7,7 @@ every family; what differs is the contract and its conformance suite, named in t
 ## 1. Start
 
 ```sh
-gh repo create <owner>/<family>-<name> --public --template glitchr-studio/omni-provider-template --clone
+gh repo create <owner>/<family>-<name> --public --template glitchr-omnisense/omni-provider-template --clone
 cd <family>-<name>
 bin/init <family> <name> "<Title>"
 composer install
@@ -45,7 +45,7 @@ docker run --rm -v "$PWD":/app -w /app ghcr.io/glitchr-studio/php:8.4 sh -c 'com
 - `Tests/<Name>ContractTest.php` uses the family's conformance trait (`<Core>\Testing\*ContractTests`).
   It runs offline, on recorded answers: give the suite the service's real answers (recorded
   once, or written from the service's documentation when no key is at hand - say which in the
-  fixture's docblock). The compatibility dashboard of the omniscient site counts a package as
+  fixture's docblock). The compatibility dashboard of the omnisense site counts a package as
   running the suite when a test class holds `use <Core>\Testing\<Something>ContractTests;`.
 - A check the service legitimately cannot meet becomes the trait's optional hook, documented -
   not a skipped test, not a fake pass. A check it fails is a defect: fix it.
@@ -92,5 +92,5 @@ A published tag is never moved or deleted: a mistake is a new version.
 ## 6. Make it known
 
 Ask the family's maintainers to list the provider in the core's README and `suggest`, and the
-omniscient site's catalogue (`catalog/<family>.yaml`) picks it up for the package pages and the
+omnisense site's catalogue (`catalog/<family>.yaml`) picks it up for the package pages and the
 compatibility dashboard.

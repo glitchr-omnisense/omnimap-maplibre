@@ -1,6 +1,6 @@
 # omnimap/maplibre
 
-MapLibre for [omniscient/omnimap](https://github.com/glitchr-studio/omnimap), under any PHP host:
+MapLibre for [omnisense/omnimap](https://github.com/glitchr-omnisense/omnimap), under any PHP host:
 the live map drawn by [MapLibre GL JS](https://maplibre.org) from a vector style - by default
 [OpenFreeMap](https://openfreemap.org)'s "liberty", free, without a key and without cookies - and
 the style read on the server to name every host it makes a visitor's browser reach. Plain PHP: no
