@@ -4,6 +4,7 @@ namespace Omnimap\MapLibre;
 
 use Omnimap\Exception\ProviderException;
 use Omnimap\Exception\UnreachableException;
+use Omnimap\Http\Redaction;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface as HttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -31,7 +32,7 @@ final readonly class Style
     {
         $style = self::json($http, $url);
         if (8 !== ($style['version'] ?? null) || !\is_array($style['sources'] ?? null)) {
-            throw ProviderException::answered('MapLibre', $url, 'something that is not a style (version 8, sources)');
+            throw Redaction::withoutArguments(ProviderException::answered('MapLibre', Redaction::text($url), 'something that is not a style (version 8, sources)'));
         }
         $sources = [];
         foreach ($style['sources'] as $name => $source) {
@@ -83,19 +84,22 @@ final readonly class Style
             $response = $http->request('GET', $url, ['headers' => ['Accept' => 'application/json']]);
             $status = $response->getStatusCode();
             if (200 !== $status) {
-                throw ProviderException::answered('MapLibre', $url, $status);
+                throw Redaction::withoutArguments(ProviderException::answered('MapLibre', Redaction::text($url), $status));
             }
             $body = $response->getContent();
         } catch (HttpException $e) {
-            throw new UnreachableException(\sprintf('MapLibre could not reach %s: %s', $url, $e->getMessage()), 0, $e);
+            // A key in the style's query (MapTiler's ?key=) masked in the message and the previous, a copy; no trace keeps arguments.
+            $secrets = Redaction::secrets($url);
+
+            throw Redaction::withoutArguments(new UnreachableException(\sprintf('MapLibre could not reach %s: %s', Redaction::text($url, $secrets), Redaction::text($e->getMessage(), $secrets)), 0, Redaction::copy($e, $secrets)));
         }
         try {
             $json = json_decode($body, true, 64, \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw ProviderException::answered('MapLibre', $url, 'something that is not JSON');
+            throw Redaction::withoutArguments(ProviderException::answered('MapLibre', Redaction::text($url), 'something that is not JSON'));
         }
         if (!\is_array($json) || array_is_list($json)) {
-            throw ProviderException::answered('MapLibre', $url, 'a JSON that is not an object');
+            throw Redaction::withoutArguments(ProviderException::answered('MapLibre', Redaction::text($url), 'a JSON that is not an object'));
         }
 
         /** @var array<string, mixed> $json */

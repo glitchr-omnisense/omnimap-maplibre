@@ -6,6 +6,12 @@ workflow refuses a tag without one.
 
 ## Unreleased
 
+### Fixed
+- No key of a style's URL (MapTiler's `?key=`) in what `Style::fetch()` throws: the address in an
+  `UnreachableException`'s or a `ProviderException`'s message is masked (`key=***`), the
+  previous is a copy of the client's exception (the same class and code), and no trace of the chain
+  keeps its arguments. Needs omnisense/omnimap's `Http\Redaction`.
+
 ### Changed
 - Requires `omnisense/omnimap`, the core's new name (Omniscient is now Omnisense); the repository is `glitchr-omnisense/omnimap-maplibre`.
 

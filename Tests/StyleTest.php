@@ -58,4 +58,31 @@ final class StyleTest extends TestCase
         $this->expectException(UnreachableException::class);
         Style::fetch(new MockHttpClient(new MockResponse('', ['error' => 'Could not resolve host'])), 'https://maps.example.org/style.json');
     }
+
+    /**
+     * A style behind a key (MapTiler's ?key=): nothing of it in the messages, the previous
+     * exception (a copy of the client's, its class kept) or the traces' arguments when
+     * zend.exception_ignore_args is off - unreachable, or answering an error.
+     */
+    public function testNoPartOfAFailureHoldsTheStylesKey(): void
+    {
+        $ignoreArgs = ini_set('zend.exception_ignore_args', '0');
+        $url = 'https://api.maptiler.example/maps/streets/style.json?key=style-key-123';
+        try {
+            foreach ([new MockResponse('', ['error' => \sprintf('Could not resolve host: api.maptiler.example for "%s".', $url)]), new MockResponse('Forbidden', ['http_code' => 403])] as $answer) {
+                try {
+                    Style::fetch(new MockHttpClient($answer), $url);
+                    self::fail('no exception');
+                } catch (ProviderException|UnreachableException $e) {
+                    self::assertStringContainsString('key=***', $e->getMessage());
+                    for ($one = $e; null !== $one; $one = $one->getPrevious()) {
+                        self::assertStringNotContainsString('style-key-123', $one->getMessage());
+                        self::assertStringNotContainsString('style-key-123', print_r($one->getTrace(), true));
+                    }
+                }
+            }
+        } finally {
+            ini_set('zend.exception_ignore_args', false !== $ignoreArgs ? $ignoreArgs : '1');
+        }
+    }
 }
