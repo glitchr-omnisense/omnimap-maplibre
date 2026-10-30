@@ -32,12 +32,9 @@ register('maplibre', maplibre);
 mountAll();
 ```
 
-> [!WARNING]
-> Known defect: omnibridge/symfony and omnibridge/laravel do not register `MapLibreFactory`
-> (they list Google's and OpenStreetMap's factories only), where every installed omnimap provider
-> is expected to be wired: `provider: maplibre` fails until the application registers the factory
-> itself (Symfony: a service tagged `omnimap.provider_factory`; Laravel: its own `Registry`
-> binding), as omnimap's Symfony and Laravel pages show.
+omnibridge/symfony and omnibridge/laravel register `MapLibreFactory` beside Google's and
+OpenStreetMap's: with this package installed, `provider: maplibre` is wired as configured, nothing
+to register by hand.
 
 ## Credentials
 
