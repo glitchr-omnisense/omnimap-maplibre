@@ -1,0 +1,38 @@
+{
+    "$schema": "https://github.com/glitchr-omnisense/contracts/blob/1.x/resources/usage-policy.schema.json",
+    "provider": "maplibre",
+    "rateLimits": [],
+    "concurrency": null,
+    "rights": {
+        "commercial": "allowed",
+        "openSourceRequired": null,
+        "caching": {
+            "permission": "unknown",
+            "maxTtl": null
+        },
+        "storage": "unknown",
+        "redistribution": "unknown",
+        "attribution": {
+            "required": true,
+            "text": "OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+            "url": "https://openfreemap.org/",
+            "where": ["map"]
+        },
+        "licence": "ODbL-1.0"
+    },
+    "requirements": {
+        "key": false,
+        "userAgent": {
+            "required": false,
+            "pattern": null
+        }
+    },
+    "provenance": {
+        "terms": "https://openfreemap.org/tos/",
+        "policy": "https://openfreemap.org/",
+        "verifiedAt": "2026-11-10",
+        "declaredBy": "maintainer",
+        "contact": "info@openfreemap.org",
+        "notes": "MapLibre GL JS is a renderer: the terms are those of the style's source. This policy is OpenFreeMap's public instance (tiles.openfreemap.org, the default style): \"no limits on the number of map views or requests\", no key, no registration, no cookies, commercial use allowed (FAQ). Attribution is required: MapLibre shows the style's own; in other clients, print or video, \"OpenFreeMap © OpenMapTiles Data from OpenStreetMap\" (the OpenFreeMap part optional). The terms of service allow offline downloads only of at most 3,000 tiles or 50 MB each, at most 4 parallel requests, with a unique User-Agent naming the application (larger ones: info@openfreemap.org), and forbid other automated data collection; caching by users is not addressed, nor redistribution. Best effort, may be discontinued without notice. The data is OpenStreetMap's (ODbL). With a style of another source (MapTiler, Mapbox, one's own), the provider declares an unknown policy instead: the site reads that source's terms and declares them (policy)."
+    }
+}

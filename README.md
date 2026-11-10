@@ -31,6 +31,15 @@ A renderer only: vector tiles are drawn by the browser's WebGL, so the server ma
 view and serves no raster tiles. The picture of a view still reaches omnimap's map cache, captured
 in the browser (`assets/capture.js`): the map keeps its drawing buffer for it.
 
+## Usage policy
+
+`policy.json` (omnisense/contracts' usage policy, read on 2026-11-10) declares OpenFreeMap's
+public instance, the default style's source: no limit on map views or requests, no key, no
+cookies, commercial use allowed, the attribution "OpenFreeMap © OpenMapTiles Data from
+OpenStreetMap" (MapLibre shows the style's own); offline downloads of at most 3,000 tiles or
+50 MB and 4 parallel requests in its terms. A style of another source (MapTiler, Mapbox, one's
+own) gives an unknown policy: the site declares that source's terms (`policy`).
+
 ## Documentation
 
 - [The manual](docs/index.md): options, capabilities, the style's hosts, behaviour, an example, errors

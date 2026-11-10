@@ -6,6 +6,13 @@ workflow refuses a tag without one.
 
 ## Unreleased
 
+### Added
+
+- `policy.json`: OpenFreeMap's terms as a usage policy (omnisense/contracts' schema), named in
+  `composer.json` (`extra.omnisense.policy`); `MapLibreProvider implements
+  DeclaresUsagePolicyInterface`, an unknown policy for a style of another source. Requires
+  omnisense/contracts.
+
 ### Fixed
 - No key of a style's URL (MapTiler's `?key=`) in what `Style::fetch()` throws: the address in an
   `UnreachableException`'s or a `ProviderException`'s message is masked (`key=***`), the
