@@ -6,6 +6,12 @@ the live map drawn by [MapLibre GL JS](https://maplibre.org) from a vector style
 the style read on the server to name every host it makes a visitor's browser reach. Plain PHP: no
 framework in `require`.
 
+```sh
+composer require omnisense/omnimap omnimap/maplibre
+```
+
+It needs no key for OpenFreeMap's styles (the default); another style may need its own key.
+
 ```php
 use Omnimap\MapHtml;
 use Omnimap\MapLibre\MapLibreFactory;

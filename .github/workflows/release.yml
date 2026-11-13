@@ -1,6 +1,8 @@
-# A release on a pushed tag vX.Y.Z: the package's suite on the tag, then glitchr-studio/ci's release
-# workflow (the tag checked, the notes from CHANGELOG.md, the source archive and its provenance, the
-# GitHub release, Packagist told when the repository holds PACKAGIST_USERNAME/PACKAGIST_TOKEN).
+# A release on a pushed tag vX.Y.Z: this package's own CI on the tagged commit (ci.yml, called), then
+# glitchr-studio/ci's release workflow, pinned: the tag checked as a version and against the branch alias,
+# the notes from CHANGELOG.md, the source archive and its provenance, the GitHub release, Packagist told
+# when the repository holds PACKAGIST_USERNAME/PACKAGIST_TOKEN. How to release: glitchr-studio/ci's
+# docs/releasing.md.
 name: release
 
 on:
@@ -9,18 +11,19 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
   verify:
-    uses: glitchr-studio/ci/.github/workflows/php-package.yml@138b69073f0983bce077fbb9e1f4e4ad88c77dc7
-    with:
-      smoke-class: 'Omnimap\MapLibre\MapLibreFactory'
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+      packages: read
+
   release:
     needs: verify
     permissions:
       contents: write
       id-token: write
       attestations: write
-    uses: glitchr-studio/ci/.github/workflows/php-release.yml@138b69073f0983bce077fbb9e1f4e4ad88c77dc7
+    uses: glitchr-studio/ci/.github/workflows/php-release.yml@133c7eda3cd536a2e3478474ead380257375589e # main, 2026-11-09
     secrets: inherit
